@@ -23,7 +23,7 @@ email: jingyuchencn@gmail.com
 description: >- # this means to ignore newlines until "baseurl:"
   既然开始写了，就坚持下去
 baseurl: "/blog" # the subpath of your site, e.g. /blog
-url: "http://change.com" # the base hostname & protocol for your site, e.g. http://example.com
+url: "https://jinyuchencn.github.io" # the base hostname & protocol for your site, e.g. http://example.com
 twitter_username: nsfw
 github_username:  jinyuchencn
 
