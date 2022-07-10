@@ -1,4 +1,122 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2022-07-10T21:26:42+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">学习改变世界</title><subtitle>既然开始写了，就坚持下去</subtitle><entry><title type="html">竟然隐隐找到了人生的目标</title><link href="http://localhost:4000/jekyll/update/2022/07/10/%E9%95%BF%E6%9C%9F%E6%9B%B4%E6%96%B0%E8%BD%AF%E6%B8%B2.html" rel="alternate" type="text/html" title="竟然隐隐找到了人生的目标" /><published>2022-07-10T21:13:46+08:00</published><updated>2022-07-10T21:13:46+08:00</updated><id>http://localhost:4000/jekyll/update/2022/07/10/%E9%95%BF%E6%9C%9F%E6%9B%B4%E6%96%B0%E8%BD%AF%E6%B8%B2</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2022/07/10/%E9%95%BF%E6%9C%9F%E6%9B%B4%E6%96%B0%E8%BD%AF%E6%B8%B2.html"><![CDATA[]]></content><author><name></name></author><category term="jekyll" /><category term="update" /><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">竟然隐隐找到了人生的目标</title><link href="http://localhost:4000/jekyll/update/2022/07/10/%E7%AB%9F%E7%84%B6%E9%9A%90%E9%9A%90%E6%89%BE%E5%88%B0%E4%BA%86%E4%BA%BA%E7%94%9F%E7%9A%84%E7%9B%AE%E6%A0%87.html" rel="alternate" type="text/html" title="竟然隐隐找到了人生的目标" /><published>2022-07-10T21:13:46+08:00</published><updated>2022-07-10T21:13:46+08:00</updated><id>http://localhost:4000/jekyll/update/2022/07/10/%E7%AB%9F%E7%84%B6%E9%9A%90%E9%9A%90%E6%89%BE%E5%88%B0%E4%BA%86%E4%BA%BA%E7%94%9F%E7%9A%84%E7%9B%AE%E6%A0%87</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2022/07/10/%E7%AB%9F%E7%84%B6%E9%9A%90%E9%9A%90%E6%89%BE%E5%88%B0%E4%BA%86%E4%BA%BA%E7%94%9F%E7%9A%84%E7%9B%AE%E6%A0%87.html"><![CDATA[<h2 id="博客太过简陋">博客太过简陋</h2>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2022-07-10T23:02:00+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">我吉良吉影只想过平静的生活</title><subtitle>不要因为任何事情停止前进的步伐</subtitle><entry><title type="html">软件渲染器 part1</title><link href="http://localhost:4000/jekyll/update/2022/07/10/%E9%95%BF%E6%9C%9F%E6%9B%B4%E6%96%B0%E8%BD%AF%E6%B8%B2.html" rel="alternate" type="text/html" title="软件渲染器 part1" /><published>2022-07-10T21:30:46+08:00</published><updated>2022-07-10T21:30:46+08:00</updated><id>http://localhost:4000/jekyll/update/2022/07/10/%E9%95%BF%E6%9C%9F%E6%9B%B4%E6%96%B0%E8%BD%AF%E6%B8%B2</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2022/07/10/%E9%95%BF%E6%9C%9F%E6%9B%B4%E6%96%B0%E8%BD%AF%E6%B8%B2.html"><![CDATA[<h3 id="前言">前言</h3>
+
+<p>算是入行一年了，但是仍然像是个废柴，懂了一些业务逻辑，但是很多深入的东西都不太行，自己的技术实力实在是不太行，不能实现自己的目标，因此要精进自己的技术水平</p>
+
+<h3 id="环境配置">环境配置</h3>
+
+<p>vscode + cmake + clang(MSVS CLI)</p>
+
+<h3 id="外部依赖">外部依赖</h3>
+
+<ul>
+  <li>windows
+    <ul>
+      <li>创建窗口
+        <ul>
+          <li><a href="https://docs.microsoft.com/en-us/previous-versions/windows/embedded/ms908192(v=msdn.10)">CreateWindow</a></li>
+        </ul>
+      </li>
+      <li>将frambuffer绘制到显示器
+        <ul>
+          <li><a href="https://docs.microsoft.com/en-us/windows/win32/api/wingdi/nf-wingdi-bitblt">BitBlt</a>
+            <ul>
+              <li>从源设备复制位图到目标设备</li>
+              <li>这里update framebuffer(image)时要注意使用指针，一方面是效率，vector直接使用下标赋值会在运行时检查越界导致效率问题</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="c1">// wrapper CreateWindow, just need w,h</span>
+    <span class="n">HWND</span> <span class="n">handle</span> <span class="o">=</span> <span class="n">createWindow</span><span class="p">(</span><span class="s">"SoftwareRenderer"</span><span class="p">,</span> <span class="n">WIDTH</span><span class="p">,</span> <span class="n">HEIGHT</span><span class="p">);</span>
+    <span class="c1">// notice: when use subscript, vector will check out of range, slow, use pointer</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">byte</span><span class="o">&gt;</span> <span class="n">image</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">byte</span><span class="o">&gt;</span><span class="p">(</span><span class="n">WIDTH</span><span class="o">*</span><span class="n">HEIGHT</span><span class="o">*</span><span class="mi">4</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>
+    <span class="n">byte</span> <span class="o">*</span><span class="n">image_p</span> <span class="o">=</span> <span class="n">image</span><span class="p">.</span><span class="n">data</span><span class="p">();</span>
+    <span class="c1">// use p to bind image with and windows HDC(Handle to Device Context)</span>
+    <span class="n">byte</span> <span class="o">**</span><span class="n">p</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">image_p</span><span class="p">;</span>
+    <span class="n">HDC</span> <span class="n">memoryDC</span><span class="p">;</span>
+    <span class="c1">// wrapper CreateDIBSection, just need w,h,image(p),memoryDC(out param)</span>
+    <span class="n">createCanvas</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="n">WIDTH</span><span class="p">,</span> <span class="n">HEIGHT</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">memoryDC</span><span class="p">);</span>
+    <span class="n">SetProp</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="n">WINDOW_ENTRY_NAME</span><span class="p">,</span> <span class="n">handle</span><span class="p">);</span>
+    <span class="n">ShowWindow</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="n">SW_SHOW</span><span class="p">);</span>
+    <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">g_window_should_close</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="c1">// update buffer</span>
+        <span class="n">update</span><span class="p">(</span><span class="n">image</span><span class="p">);</span>
+        <span class="c1">// get windows DC, </span>
+        <span class="n">HDC</span> <span class="n">window_dc</span> <span class="o">=</span> <span class="n">GetDC</span><span class="p">(</span><span class="n">handle</span><span class="p">);</span>
+        <span class="c1">// replace windows DC with memory DC</span>
+        <span class="n">BitBlt</span><span class="p">(</span><span class="n">window_dc</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">WIDTH</span><span class="p">,</span> <span class="n">HEIGHT</span><span class="p">,</span> <span class="n">memoryDC</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">SRCCOPY</span><span class="p">);</span>
+        <span class="c1">// release windows_dc        </span>
+        <span class="n">ReleaseDC</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="n">window_dc</span><span class="p">);</span>
+        <span class="n">UpdateWindow</span><span class="p">(</span><span class="n">handle</span><span class="p">);</span>        
+        <span class="c1">// handle windows message</span>
+        <span class="n">MSG</span> <span class="n">message</span><span class="p">;</span>
+        <span class="k">while</span> <span class="p">(</span><span class="n">PeekMessage</span><span class="p">(</span><span class="o">&amp;</span><span class="n">message</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">PM_REMOVE</span><span class="p">))</span> <span class="p">{</span>
+            <span class="n">TranslateMessage</span><span class="p">(</span><span class="o">&amp;</span><span class="n">message</span><span class="p">);</span>
+            <span class="n">DispatchMessage</span><span class="p">(</span><span class="o">&amp;</span><span class="n">message</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="模块">模块</h3>
+<ul>
+  <li>Timer
+    <ul>
+      <li>读取CPU高精度寄存器，用于精确计时</li>
+    </ul>
+  </li>
+  <li>render pipeline
+    <ul>
+      <li>IO
+        <ul>
+          <li>获取顶点数据和图元(primitive)类型(点、线、三角形线框，三角形面…)</li>
+        </ul>
+      </li>
+      <li>Vertex Shader
+        <ul>
+          <li>顶点着色器处理顶点，将其转换到世界坐标（M-&gt;W），读取纹理与纹理坐标，计算顶点色，输出到一个中间结构体(V2F,独立的顶点)</li>
+        </ul>
+      </li>
+      <li>Shape Assembly
+        <ul>
+          <li>图元装配，根据指定的图元类型把图元与顶点绑定（一个三角形绑定三个点）</li>
+        </ul>
+      </li>
+      <li>投影、裁剪、面剔除、坐标变换
+        <ul>
+          <li>W-&gt;V</li>
+          <li>裁掉投影空间外的图元</li>
+          <li>剔除背向面</li>
+          <li>V-&gt;NDC，NDC-&gt;viewport</li>
+        </ul>
+      </li>
+      <li>光栅化
+        <ul>
+          <li>算每个图元的顶点覆盖的像素点</li>
+          <li>根据图元类型和顶点位置插值算出每个图元对应的像素点集</li>
+        </ul>
+      </li>
+      <li>frame shader
+        <ul>
+          <li>lighting</li>
+          <li>texture</li>
+          <li>最终会算出每个图元每个像素的RGBA</li>
+        </ul>
+      </li>
+      <li>alpha/template/depth test</li>
+      <li>blend</li>
+      <li>跑完以上流程就有了一张buffer，可以根据平台和设备将它绘制出来了</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="git-repo">git repo</h3>
+
+<p><a href="https://github.com/jinyuchencn/SoftwareRenderer">SoftwareRenderer</a></p>]]></content><author><name></name></author><category term="jekyll" /><category term="update" /><summary type="html"><![CDATA[前言]]></summary></entry><entry><title type="html">竟然隐隐找到了人生的目标</title><link href="http://localhost:4000/jekyll/update/2022/07/10/%E7%AB%9F%E7%84%B6%E9%9A%90%E9%9A%90%E6%89%BE%E5%88%B0%E4%BA%86%E4%BA%BA%E7%94%9F%E7%9A%84%E7%9B%AE%E6%A0%87.html" rel="alternate" type="text/html" title="竟然隐隐找到了人生的目标" /><published>2022-07-10T21:13:46+08:00</published><updated>2022-07-10T21:13:46+08:00</updated><id>http://localhost:4000/jekyll/update/2022/07/10/%E7%AB%9F%E7%84%B6%E9%9A%90%E9%9A%90%E6%89%BE%E5%88%B0%E4%BA%86%E4%BA%BA%E7%94%9F%E7%9A%84%E7%9B%AE%E6%A0%87</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2022/07/10/%E7%AB%9F%E7%84%B6%E9%9A%90%E9%9A%90%E6%89%BE%E5%88%B0%E4%BA%86%E4%BA%BA%E7%94%9F%E7%9A%84%E7%9B%AE%E6%A0%87.html"><![CDATA[<h2 id="博客太过简陋">博客太过简陋</h2>
 
 <ul>
   <li>确实，但是把事情做起来就只能从简单开始，别想一口吞个胖子，你看着有意思的东西，别人可能做了五六年<del>你会去补受死版魂一吗</del></li>

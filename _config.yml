@@ -18,19 +18,22 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 
-title: 学习改变世界
+title: 我吉良吉影只想过平静的生活
 email: jingyuchencn@gmail.com
 description: >- # this means to ignore newlines until "baseurl:"
-  既然开始写了，就坚持下去
+  不要因为任何事情停止前进的步伐
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://jinyuchencn.github.io" # the base hostname & protocol for your site, e.g. http://example.com
 github_username:  jinyuchencn
-
 # Build settings
 theme: minima
 plugins:
   - jekyll-feed
-
+highlighter: rouge
+markdown: kramdown
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
 # Exclude from processing.
 # The following items will not be processed, by default.
 # Any item listed under the `exclude:` key here will be automatically added to
