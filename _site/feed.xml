@@ -1,172 +1,250 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.2">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2022-07-10T23:02:00+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">我吉良吉影只想过平静的生活</title><subtitle>不要因为任何事情停止前进的步伐</subtitle><entry><title type="html">软件渲染器 part1</title><link href="http://localhost:4000/jekyll/update/2022/07/10/%E9%95%BF%E6%9C%9F%E6%9B%B4%E6%96%B0%E8%BD%AF%E6%B8%B2.html" rel="alternate" type="text/html" title="软件渲染器 part1" /><published>2022-07-10T21:30:46+08:00</published><updated>2022-07-10T21:30:46+08:00</updated><id>http://localhost:4000/jekyll/update/2022/07/10/%E9%95%BF%E6%9C%9F%E6%9B%B4%E6%96%B0%E8%BD%AF%E6%B8%B2</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2022/07/10/%E9%95%BF%E6%9C%9F%E6%9B%B4%E6%96%B0%E8%BD%AF%E6%B8%B2.html"><![CDATA[<h3 id="前言">前言</h3>
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>My World</title>
+    <description>游戏开发者 | 陈景宇的个人博客，与你一起发现更大的世界。</description>
+    <link>http://localhost:4000/</link>
+    <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
+    <pubDate>Mon, 11 Jul 2022 00:22:16 +0800</pubDate>
+    <lastBuildDate>Mon, 11 Jul 2022 00:22:16 +0800</lastBuildDate>
+    <generator>Jekyll v4.2.2</generator>
+    
+      <item>
+        <title>软件渲染器 part1</title>
+        <description>&lt;h3 id=&quot;前言&quot;&gt;前言&lt;/h3&gt;
 
-<p>算是入行一年了，但是仍然像是个废柴，懂了一些业务逻辑，但是很多深入的东西都不太行，自己的技术实力实在是不太行，不能实现自己的目标，因此要精进自己的技术水平</p>
+&lt;p&gt;算是入行一年了，但是仍然像是个废柴，懂了一些业务逻辑，但是很多深入的东西都不太行，自己的技术实力实在是不太行，不能实现自己的目标，因此要精进自己的技术水平&lt;/p&gt;
 
-<h3 id="环境配置">环境配置</h3>
+&lt;h3 id=&quot;环境配置&quot;&gt;环境配置&lt;/h3&gt;
 
-<p>vscode + cmake + clang(MSVS CLI)</p>
+&lt;p&gt;vscode + cmake + clang(MSVS CLI)&lt;/p&gt;
 
-<h3 id="外部依赖">外部依赖</h3>
+&lt;h3 id=&quot;外部依赖&quot;&gt;外部依赖&lt;/h3&gt;
 
-<ul>
-  <li>windows
-    <ul>
-      <li>创建窗口
-        <ul>
-          <li><a href="https://docs.microsoft.com/en-us/previous-versions/windows/embedded/ms908192(v=msdn.10)">CreateWindow</a></li>
-        </ul>
-      </li>
-      <li>将frambuffer绘制到显示器
-        <ul>
-          <li><a href="https://docs.microsoft.com/en-us/windows/win32/api/wingdi/nf-wingdi-bitblt">BitBlt</a>
-            <ul>
-              <li>从源设备复制位图到目标设备</li>
-              <li>这里update framebuffer(image)时要注意使用指针，一方面是效率，vector直接使用下标赋值会在运行时检查越界导致效率问题</li>
-            </ul>
-          </li>
-        </ul>
-      </li>
-    </ul>
-  </li>
-</ul>
+&lt;ul&gt;
+  &lt;li&gt;windows
+    &lt;ul&gt;
+      &lt;li&gt;创建窗口
+        &lt;ul&gt;
+          &lt;li&gt;&lt;a href=&quot;https://docs.microsoft.com/en-us/previous-versions/windows/embedded/ms908192(v=msdn.10)&quot;&gt;CreateWindow&lt;/a&gt;&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;将frambuffer绘制到显示器
+        &lt;ul&gt;
+          &lt;li&gt;&lt;a href=&quot;https://docs.microsoft.com/en-us/windows/win32/api/wingdi/nf-wingdi-bitblt&quot;&gt;BitBlt&lt;/a&gt;
+            &lt;ul&gt;
+              &lt;li&gt;从源设备复制位图到目标设备&lt;/li&gt;
+              &lt;li&gt;这里update framebuffer(image)时要注意使用指针，一方面是效率，vector直接使用下标赋值会在运行时检查越界导致效率问题&lt;/li&gt;
+            &lt;/ul&gt;
+          &lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
 
-<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="c1">// wrapper CreateWindow, just need w,h</span>
-    <span class="n">HWND</span> <span class="n">handle</span> <span class="o">=</span> <span class="n">createWindow</span><span class="p">(</span><span class="s">"SoftwareRenderer"</span><span class="p">,</span> <span class="n">WIDTH</span><span class="p">,</span> <span class="n">HEIGHT</span><span class="p">);</span>
-    <span class="c1">// notice: when use subscript, vector will check out of range, slow, use pointer</span>
-    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">byte</span><span class="o">&gt;</span> <span class="n">image</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">byte</span><span class="o">&gt;</span><span class="p">(</span><span class="n">WIDTH</span><span class="o">*</span><span class="n">HEIGHT</span><span class="o">*</span><span class="mi">4</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span>
-    <span class="n">byte</span> <span class="o">*</span><span class="n">image_p</span> <span class="o">=</span> <span class="n">image</span><span class="p">.</span><span class="n">data</span><span class="p">();</span>
-    <span class="c1">// use p to bind image with and windows HDC(Handle to Device Context)</span>
-    <span class="n">byte</span> <span class="o">**</span><span class="n">p</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">image_p</span><span class="p">;</span>
-    <span class="n">HDC</span> <span class="n">memoryDC</span><span class="p">;</span>
-    <span class="c1">// wrapper CreateDIBSection, just need w,h,image(p),memoryDC(out param)</span>
-    <span class="n">createCanvas</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="n">WIDTH</span><span class="p">,</span> <span class="n">HEIGHT</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">memoryDC</span><span class="p">);</span>
-    <span class="n">SetProp</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="n">WINDOW_ENTRY_NAME</span><span class="p">,</span> <span class="n">handle</span><span class="p">);</span>
-    <span class="n">ShowWindow</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="n">SW_SHOW</span><span class="p">);</span>
-    <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">g_window_should_close</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="c1">// update buffer</span>
-        <span class="n">update</span><span class="p">(</span><span class="n">image</span><span class="p">);</span>
-        <span class="c1">// get windows DC, </span>
-        <span class="n">HDC</span> <span class="n">window_dc</span> <span class="o">=</span> <span class="n">GetDC</span><span class="p">(</span><span class="n">handle</span><span class="p">);</span>
-        <span class="c1">// replace windows DC with memory DC</span>
-        <span class="n">BitBlt</span><span class="p">(</span><span class="n">window_dc</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">WIDTH</span><span class="p">,</span> <span class="n">HEIGHT</span><span class="p">,</span> <span class="n">memoryDC</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">SRCCOPY</span><span class="p">);</span>
-        <span class="c1">// release windows_dc        </span>
-        <span class="n">ReleaseDC</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="n">window_dc</span><span class="p">);</span>
-        <span class="n">UpdateWindow</span><span class="p">(</span><span class="n">handle</span><span class="p">);</span>        
-        <span class="c1">// handle windows message</span>
-        <span class="n">MSG</span> <span class="n">message</span><span class="p">;</span>
-        <span class="k">while</span> <span class="p">(</span><span class="n">PeekMessage</span><span class="p">(</span><span class="o">&amp;</span><span class="n">message</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">PM_REMOVE</span><span class="p">))</span> <span class="p">{</span>
-            <span class="n">TranslateMessage</span><span class="p">(</span><span class="o">&amp;</span><span class="n">message</span><span class="p">);</span>
-            <span class="n">DispatchMessage</span><span class="p">(</span><span class="o">&amp;</span><span class="n">message</span><span class="p">);</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-</code></pre></div></div>
+&lt;div class=&quot;language-cpp highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;rouge-gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;rouge-code&quot;&gt;&lt;pre&gt;    &lt;span class=&quot;c1&quot;&gt;// wrapper CreateWindow, just need w,h&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;HWND&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;handle&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;createWindow&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;SoftwareRenderer&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;WIDTH&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;HEIGHT&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;// notice: when use subscript, vector will check out of range, slow, use pointer&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;vector&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;byte&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;image&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;vector&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;byte&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;WIDTH&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;HEIGHT&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;byte&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;image_p&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;image&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;// use p to bind image with and windows HDC(Handle to Device Context)&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;byte&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;p&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;image_p&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;HDC&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;memoryDC&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;// wrapper CreateDIBSection, just need w,h,image(p),memoryDC(out param)&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;createCanvas&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;handle&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;WIDTH&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;HEIGHT&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;memoryDC&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;SetProp&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;handle&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;WINDOW_ENTRY_NAME&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;handle&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;ShowWindow&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;handle&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;SW_SHOW&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;g_window_should_close&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;// update buffer&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;update&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;image&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;// get windows DC, &lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;HDC&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;window_dc&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;GetDC&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;handle&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;// replace windows DC with memory DC&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;BitBlt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;window_dc&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;WIDTH&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;HEIGHT&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;memoryDC&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;SRCCOPY&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;// release windows_dc        &lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;ReleaseDC&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;handle&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;window_dc&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;UpdateWindow&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;handle&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;        
+        &lt;span class=&quot;c1&quot;&gt;// handle windows message&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;MSG&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;message&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;PeekMessage&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;message&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;NULL&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;PM_REMOVE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;TranslateMessage&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;message&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;DispatchMessage&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;message&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-<h3 id="模块">模块</h3>
-<ul>
-  <li>Timer
-    <ul>
-      <li>读取CPU高精度寄存器，用于精确计时</li>
-    </ul>
-  </li>
-  <li>render pipeline
-    <ul>
-      <li>IO
-        <ul>
-          <li>获取顶点数据和图元(primitive)类型(点、线、三角形线框，三角形面…)</li>
-        </ul>
-      </li>
-      <li>Vertex Shader
-        <ul>
-          <li>顶点着色器处理顶点，将其转换到世界坐标（M-&gt;W），读取纹理与纹理坐标，计算顶点色，输出到一个中间结构体(V2F,独立的顶点)</li>
-        </ul>
-      </li>
-      <li>Shape Assembly
-        <ul>
-          <li>图元装配，根据指定的图元类型把图元与顶点绑定（一个三角形绑定三个点）</li>
-        </ul>
-      </li>
-      <li>投影、裁剪、面剔除、坐标变换
-        <ul>
-          <li>W-&gt;V</li>
-          <li>裁掉投影空间外的图元</li>
-          <li>剔除背向面</li>
-          <li>V-&gt;NDC，NDC-&gt;viewport</li>
-        </ul>
-      </li>
-      <li>光栅化
-        <ul>
-          <li>算每个图元的顶点覆盖的像素点</li>
-          <li>根据图元类型和顶点位置插值算出每个图元对应的像素点集</li>
-        </ul>
-      </li>
-      <li>frame shader
-        <ul>
-          <li>lighting</li>
-          <li>texture</li>
-          <li>最终会算出每个图元每个像素的RGBA</li>
-        </ul>
-      </li>
-      <li>alpha/template/depth test</li>
-      <li>blend</li>
-      <li>跑完以上流程就有了一张buffer，可以根据平台和设备将它绘制出来了</li>
-    </ul>
-  </li>
-</ul>
+&lt;h3 id=&quot;模块&quot;&gt;模块&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;Timer
+    &lt;ul&gt;
+      &lt;li&gt;读取CPU高精度寄存器，用于精确计时&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;render pipeline
+    &lt;ul&gt;
+      &lt;li&gt;IO
+        &lt;ul&gt;
+          &lt;li&gt;获取顶点数据和图元(primitive)类型(点、线、三角形线框，三角形面…)&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;Vertex Shader
+        &lt;ul&gt;
+          &lt;li&gt;顶点着色器处理顶点，将其转换到世界坐标（M-&amp;gt;W），读取纹理与纹理坐标，计算顶点色，输出到一个中间结构体(V2F,独立的顶点)&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;Shape Assembly
+        &lt;ul&gt;
+          &lt;li&gt;图元装配，根据指定的图元类型把图元与顶点绑定（一个三角形绑定三个点）&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;投影、裁剪、面剔除、坐标变换
+        &lt;ul&gt;
+          &lt;li&gt;W-&amp;gt;V&lt;/li&gt;
+          &lt;li&gt;裁掉投影空间外的图元&lt;/li&gt;
+          &lt;li&gt;剔除背向面&lt;/li&gt;
+          &lt;li&gt;V-&amp;gt;NDC，NDC-&amp;gt;viewport&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;光栅化
+        &lt;ul&gt;
+          &lt;li&gt;算每个图元的顶点覆盖的像素点&lt;/li&gt;
+          &lt;li&gt;根据图元类型和顶点位置插值算出每个图元对应的像素点集&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;frame shader
+        &lt;ul&gt;
+          &lt;li&gt;lighting&lt;/li&gt;
+          &lt;li&gt;texture&lt;/li&gt;
+          &lt;li&gt;最终会算出每个图元每个像素的RGBA&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;alpha/template/depth test&lt;/li&gt;
+      &lt;li&gt;blend&lt;/li&gt;
+      &lt;li&gt;跑完以上流程就有了一张buffer，可以根据平台和设备将它绘制出来了&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
 
-<h3 id="git-repo">git repo</h3>
+&lt;h3 id=&quot;git-repo&quot;&gt;git repo&lt;/h3&gt;
 
-<p><a href="https://github.com/jinyuchencn/SoftwareRenderer">SoftwareRenderer</a></p>]]></content><author><name></name></author><category term="jekyll" /><category term="update" /><summary type="html"><![CDATA[前言]]></summary></entry><entry><title type="html">竟然隐隐找到了人生的目标</title><link href="http://localhost:4000/jekyll/update/2022/07/10/%E7%AB%9F%E7%84%B6%E9%9A%90%E9%9A%90%E6%89%BE%E5%88%B0%E4%BA%86%E4%BA%BA%E7%94%9F%E7%9A%84%E7%9B%AE%E6%A0%87.html" rel="alternate" type="text/html" title="竟然隐隐找到了人生的目标" /><published>2022-07-10T21:13:46+08:00</published><updated>2022-07-10T21:13:46+08:00</updated><id>http://localhost:4000/jekyll/update/2022/07/10/%E7%AB%9F%E7%84%B6%E9%9A%90%E9%9A%90%E6%89%BE%E5%88%B0%E4%BA%86%E4%BA%BA%E7%94%9F%E7%9A%84%E7%9B%AE%E6%A0%87</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2022/07/10/%E7%AB%9F%E7%84%B6%E9%9A%90%E9%9A%90%E6%89%BE%E5%88%B0%E4%BA%86%E4%BA%BA%E7%94%9F%E7%9A%84%E7%9B%AE%E6%A0%87.html"><![CDATA[<h2 id="博客太过简陋">博客太过简陋</h2>
+&lt;p&gt;&lt;a href=&quot;https://github.com/jinyuchencn/SoftwareRenderer&quot;&gt;SoftwareRenderer&lt;/a&gt;&lt;/p&gt;
 
-<ul>
-  <li>确实，但是把事情做起来就只能从简单开始，别想一口吞个胖子，你看着有意思的东西，别人可能做了五六年<del>你会去补受死版魂一吗</del></li>
-  <li>但是要有个计划，目前的想法是先更新起来，美观问题，之后再结局<del>找个好点的jekyll模板</del></li>
-</ul>
+</description>
+        <pubDate>Sun, 10 Jul 2022 21:30:46 +0800</pubDate>
+        <link>http://localhost:4000/jekyll/update/2022/07/10/%E9%95%BF%E6%9C%9F%E6%9B%B4%E6%96%B0%E8%BD%AF%E6%B8%B2/</link>
+        <guid isPermaLink="true">http://localhost:4000/jekyll/update/2022/07/10/%E9%95%BF%E6%9C%9F%E6%9B%B4%E6%96%B0%E8%BD%AF%E6%B8%B2/</guid>
+        
+        <category>render</category>
+        
+        <category>C++</category>
+        
+        
+        <category>jekyll</category>
+        
+        <category>update</category>
+        
+      </item>
+    
+      <item>
+        <title>竟然隐隐找到了人生的目标</title>
+        <description>&lt;h2 id=&quot;博客太过简陋&quot;&gt;博客太过简陋&lt;/h2&gt;
 
-<h2 id="未来怎么样">未来怎么样</h2>
+&lt;ul&gt;
+  &lt;li&gt;确实，但是把事情做起来就只能从简单开始，别想一口吞个胖子，你看着有意思的东西，别人可能做了五六年&lt;del&gt;你会去补受死版魂一吗&lt;/del&gt;&lt;/li&gt;
+  &lt;li&gt;但是要有个计划，目前的想法是先更新起来，美观问题，之后再结局&lt;del&gt;找个好点的jekyll模板&lt;/del&gt;&lt;/li&gt;
+&lt;/ul&gt;
 
-<ul>
-  <li>你决不是最惨的一个</li>
-  <li>最惨的应该也能活下去吧</li>
-  <li>尽自己最大的努力让身边人变得更好、</li>
-  <li>开始写东西，做项目，锻炼身体，好好工作</li>
-</ul>
+&lt;h2 id=&quot;未来怎么样&quot;&gt;未来怎么样&lt;/h2&gt;
 
-<h2 id="更新计划">更新计划</h2>
+&lt;ul&gt;
+  &lt;li&gt;你决不是最惨的一个&lt;/li&gt;
+  &lt;li&gt;最惨的应该也能活下去吧&lt;/li&gt;
+  &lt;li&gt;尽自己最大的努力让身边人变得更好、&lt;/li&gt;
+  &lt;li&gt;开始写东西，做项目，锻炼身体，好好工作&lt;/li&gt;
+&lt;/ul&gt;
 
-<ul>
-  <li>你不是要做软渲吗？你东西呢？</li>
-</ul>]]></content><author><name></name></author><category term="jekyll" /><category term="update" /><summary type="html"><![CDATA[博客太过简陋]]></summary></entry><entry><title type="html">真正意义上的第一篇博客</title><link href="http://localhost:4000/jekyll/update/2022/04/24/%E5%BC%80%E5%A7%8B%E7%9C%9F%E6%AD%A3%E7%9A%84%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2.html" rel="alternate" type="text/html" title="真正意义上的第一篇博客" /><published>2022-04-24T23:51:46+08:00</published><updated>2022-04-24T23:51:46+08:00</updated><id>http://localhost:4000/jekyll/update/2022/04/24/%E5%BC%80%E5%A7%8B%E7%9C%9F%E6%AD%A3%E7%9A%84%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2022/04/24/%E5%BC%80%E5%A7%8B%E7%9C%9F%E6%AD%A3%E7%9A%84%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2.html"><![CDATA[<h2 id="为什么写博客">为什么写博客</h2>
+&lt;h2 id=&quot;更新计划&quot;&gt;更新计划&lt;/h2&gt;
 
-<p>工作了快一年了，学到了不少东西，但感觉深入的地方不多，自己的水平只能说渐渐熟悉了公司的代码，渐渐熟悉了一个人在外打工生活，但是很明显，我在很多地方，都没有做的很好，我认为这与我没有定期的反思规划自己有很大的关系，靠别的东西推着走，结果总会不尽人意。有了规划也许没法实行，但至少走出了第一步</p>
+&lt;ul&gt;
+  &lt;li&gt;你不是要做软渲吗？你东西呢？&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        <pubDate>Sun, 10 Jul 2022 21:13:46 +0800</pubDate>
+        <link>http://localhost:4000/jekyll/update/2022/07/10/%E7%AB%9F%E7%84%B6%E9%9A%90%E9%9A%90%E6%89%BE%E5%88%B0%E4%BA%86%E4%BA%BA%E7%94%9F%E7%9A%84%E7%9B%AE%E6%A0%87/</link>
+        <guid isPermaLink="true">http://localhost:4000/jekyll/update/2022/07/10/%E7%AB%9F%E7%84%B6%E9%9A%90%E9%9A%90%E6%89%BE%E5%88%B0%E4%BA%86%E4%BA%BA%E7%94%9F%E7%9A%84%E7%9B%AE%E6%A0%87/</guid>
+        
+        <category>随笔</category>
+        
+        
+        <category>jekyll</category>
+        
+        <category>update</category>
+        
+      </item>
+    
+      <item>
+        <title>真正意义上的第一篇博客</title>
+        <description>&lt;h2 id=&quot;为什么写博客&quot;&gt;为什么写博客&lt;/h2&gt;
 
-<h2 id="为什么选择jekyll">为什么选择jekyll</h2>
+&lt;p&gt;工作了快一年了，学到了不少东西，但感觉深入的地方不多，自己的水平只能说渐渐熟悉了公司的代码，渐渐熟悉了一个人在外打工生活，但是很明显，我在很多地方，都没有做的很好，我认为这与我没有定期的反思规划自己有很大的关系，靠别的东西推着走，结果总会不尽人意。有了规划也许没法实行，但至少走出了第一步&lt;/p&gt;
 
-<ul>
-  <li>看过的很多博客都在用，好评</li>
-  <li>习惯markdown做笔记</li>
-  <li>之前用过别人的模板，配过一轮环境</li>
-</ul>
+&lt;h2 id=&quot;为什么选择jekyll&quot;&gt;为什么选择jekyll&lt;/h2&gt;
 
-<h2 id="可能有的博文">可能有的博文</h2>
+&lt;ul&gt;
+  &lt;li&gt;看过的很多博客都在用，好评&lt;/li&gt;
+  &lt;li&gt;习惯markdown做笔记&lt;/li&gt;
+  &lt;li&gt;之前用过别人的模板，配过一轮环境&lt;/li&gt;
+&lt;/ul&gt;
 
-<ul>
-  <li>技术学习</li>
-  <li>随笔</li>
-</ul>]]></content><author><name></name></author><category term="jekyll" /><category term="update" /><summary type="html"><![CDATA[为什么写博客]]></summary></entry><entry><title type="html">Welcome to Jekyll!</title><link href="http://localhost:4000/jekyll/update/2022/04/24/welcome-to-jekyll.html" rel="alternate" type="text/html" title="Welcome to Jekyll!" /><published>2022-04-24T23:39:46+08:00</published><updated>2022-04-24T23:39:46+08:00</updated><id>http://localhost:4000/jekyll/update/2022/04/24/welcome-to-jekyll</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2022/04/24/welcome-to-jekyll.html"><![CDATA[<p>You’ll find this post in your <code class="language-plaintext highlighter-rouge">_posts</code> directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run <code class="language-plaintext highlighter-rouge">jekyll serve</code>, which launches a web server and auto-regenerates your site when a file is updated.</p>
+&lt;h2 id=&quot;可能有的博文&quot;&gt;可能有的博文&lt;/h2&gt;
 
-<p>Jekyll requires blog post files to be named according to the following format:</p>
-
-<p><code class="language-plaintext highlighter-rouge">YEAR-MONTH-DAY-title.MARKUP</code></p>
-
-<p>Where <code class="language-plaintext highlighter-rouge">YEAR</code> is a four-digit number, <code class="language-plaintext highlighter-rouge">MONTH</code> and <code class="language-plaintext highlighter-rouge">DAY</code> are both two-digit numbers, and <code class="language-plaintext highlighter-rouge">MARKUP</code> is the file extension representing the format used in the file. After that, include the necessary front matter. Take a look at the source for this post to get an idea about how it works.</p>
-
-<p>Jekyll also offers powerful support for code snippets:</p>
-
-<figure class="highlight"><pre><code class="language-ruby" data-lang="ruby"><span class="k">def</span> <span class="nf">print_hi</span><span class="p">(</span><span class="nb">name</span><span class="p">)</span>
-  <span class="nb">puts</span> <span class="s2">"Hi, </span><span class="si">#{</span><span class="nb">name</span><span class="si">}</span><span class="s2">"</span>
-<span class="k">end</span>
-<span class="n">print_hi</span><span class="p">(</span><span class="s1">'Tom'</span><span class="p">)</span>
-<span class="c1">#=&gt; prints 'Hi, Tom' to STDOUT.</span></code></pre></figure>
-
-<p>Check out the <a href="https://jekyllrb.com/docs/home">Jekyll docs</a> for more info on how to get the most out of Jekyll. File all bugs/feature requests at <a href="https://github.com/jekyll/jekyll">Jekyll’s GitHub repo</a>. If you have questions, you can ask them on <a href="https://talk.jekyllrb.com/">Jekyll Talk</a>.</p>]]></content><author><name></name></author><category term="jekyll" /><category term="update" /><summary type="html"><![CDATA[You’ll find this post in your _posts directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run jekyll serve, which launches a web server and auto-regenerates your site when a file is updated.]]></summary></entry></feed>
+&lt;ul&gt;
+  &lt;li&gt;技术学习&lt;/li&gt;
+  &lt;li&gt;随笔&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        <pubDate>Sun, 24 Apr 2022 23:51:46 +0800</pubDate>
+        <link>http://localhost:4000/jekyll/update/2022/04/24/%E5%BC%80%E5%A7%8B%E7%9C%9F%E6%AD%A3%E7%9A%84%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2/</link>
+        <guid isPermaLink="true">http://localhost:4000/jekyll/update/2022/04/24/%E5%BC%80%E5%A7%8B%E7%9C%9F%E6%AD%A3%E7%9A%84%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2/</guid>
+        
+        
+        <category>jekyll</category>
+        
+        <category>update</category>
+        
+      </item>
+    
+  </channel>
+</rss>
