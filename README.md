@@ -1,5 +1,5 @@
 ## 简介
-开始写博客了！
+开始写[博客](https://jinyuchencn.github.io/)了！
 
 ## 致谢
 感谢黄玄大佬Jekyll的模板
